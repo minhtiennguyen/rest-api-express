@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { spy } from 'sinon';
 
-import { sum, callMyFunction } from './index';
+import { sum, callMyFunction } from './example';
 
 describe('sum function',() => {
   it('sum up 2 intergers', () => {

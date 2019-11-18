@@ -1,18 +1,15 @@
 import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
 
-console.log('Hello ever running Node.js project.');
-console.log(process.env.MY_SECRET);
+const app = express();
+const port = process.env.PORT || 3000;
+app.use(cors());
 
-export function sum(a, b) {
-  return a + b;
-}
-
-export function callMyFunction(callback) {
-  callback();
-}
-
-console.log(sum(1,2));
-
-callMyFunction(function() {
-  console.log('Hello world');
+app.get('/', (req, res) => {
+  res.send('Hello World!');
 });
+
+app.listen(port, () => {
+  console.log(`App is listening on port ${port}`);
+})
