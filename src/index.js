@@ -3,8 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import uuidv4 from 'uuid/v4';
 
-import models from './models';
+// import models from './models';
 import routes from './routes';
+import models, { connectDb } from './models';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -31,6 +32,17 @@ app.get('/users', (req, res) => {
   return res.send(Object.values(req.context.models.users));
 });
 
-app.listen(port, () => {
-  console.log(`App is listening on port ${port}`);
+const eraseDatabaseOnSync = true;
+
+connectDb().then(async () => {
+  if(eraseDatabaseOnSync) {
+    await Promise.all([
+      models.User.deleteMany({}),
+      models.Message.deleteMany({})
+    ]);
+  }
+
+  app.listen(port, () => {
+    console.log(`App is listening on port ${port}`);
+  });
 });
