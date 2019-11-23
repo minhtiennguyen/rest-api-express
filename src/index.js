@@ -35,6 +35,7 @@ app.get('/users', (req, res) => {
 const eraseDatabaseOnSync = true;
 
 connectDb().then(async () => {
+  // re-initialize db on every server start
   if(eraseDatabaseOnSync) {
     await Promise.all([
       models.User.deleteMany({}),
@@ -42,7 +43,40 @@ connectDb().then(async () => {
     ]);
   }
 
+  createUserWithMessages();
+
   app.listen(port, () => {
     console.log(`App is listening on port ${port}`);
   });
 });
+
+// seeding function
+const createUserWithMessages = async () => {
+  const user1 = new models.User({
+    username: 'tnguyen1'
+  });
+
+  const user2 = new models.User({
+    username: 'tnguyen2'
+  });
+
+  const mes1 = new models.Message({
+    text: 'Message 1',
+    user: user1.id
+  });
+  const mes2 = new models.Message({
+    text: 'Message 2',
+    user: user2.id
+  });
+  const mes3 = new models.Message({
+    text: 'Message 3',
+    user: user2.id
+  });
+
+  await mes1.save();
+  await mes2.save();
+  await mes3.save();
+
+  await user1.save();
+  await user2.save();
+};
